@@ -41,8 +41,7 @@ class AgentLoop:
         model: str | None = None,
         max_iterations: int = 20,
         brave_api_key: str | None = None,
-        exec_config: "ExecToolConfig | None" = None,
-        max_tokens: int = 4096,
+        max_tokens: int = 8192,
         temperature: float = 0.7,
     ):
         from nanobot.config.schema import ExecToolConfig
