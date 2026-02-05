@@ -42,6 +42,8 @@ class AgentLoop:
         max_iterations: int = 20,
         brave_api_key: str | None = None,
         exec_config: "ExecToolConfig | None" = None,
+        max_tokens: int = 4096,
+        temperature: float = 0.7,
     ):
         from nanobot.config.schema import ExecToolConfig
         self.bus = bus
@@ -51,6 +53,8 @@ class AgentLoop:
         self.max_iterations = max_iterations
         self.brave_api_key = brave_api_key
         self.exec_config = exec_config or ExecToolConfig()
+        self.max_tokens = max_tokens
+        self.temperature = temperature
         
         self.context = ContextBuilder(workspace)
         self.sessions = SessionManager(workspace)
@@ -62,6 +66,8 @@ class AgentLoop:
             model=self.model,
             brave_api_key=brave_api_key,
             exec_config=self.exec_config,
+            max_tokens=max_tokens,
+            temperature=temperature,
         )
         
         self._running = False
@@ -175,7 +181,9 @@ class AgentLoop:
             response = await self.provider.chat(
                 messages=messages,
                 tools=self.tools.get_definitions(),
-                model=self.model
+                model=self.model,
+                max_tokens=self.max_tokens,
+                temperature=self.temperature,
             )
             
             # Handle tool calls
@@ -271,7 +279,9 @@ class AgentLoop:
             response = await self.provider.chat(
                 messages=messages,
                 tools=self.tools.get_definitions(),
-                model=self.model
+                model=self.model,
+                max_tokens=self.max_tokens,
+                temperature=self.temperature,
             )
             
             if response.has_tool_calls:
