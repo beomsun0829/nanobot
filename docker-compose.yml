@@ -13,6 +13,8 @@ services:
     restart: unless-stopped
     ports:
       - 18790:18790
+    extra_hosts:
+      - host.docker.internal:host-gateway
     deploy:
       resources:
         limits:
@@ -29,3 +31,5 @@ services:
     command: ["status"]
     stdin_open: true
     tty: true
+    extra_hosts:
+      - host.docker.internal:host-gateway
